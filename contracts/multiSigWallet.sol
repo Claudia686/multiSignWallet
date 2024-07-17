@@ -22,4 +22,13 @@ modifier onlySignatory() {
  constructor(address[3] memory _signatories) {
  	signatories = _signatories;
  }
+
+ function isSignatory(address _address) public view returns (bool) {
+ 	for (uint i = 0; i < signatories.length; i++) {
+ 		if (signatories[i] == _address) {
+ 			return true;
+ 		}
+ 	}
+ 	return false;
+ }
 }
