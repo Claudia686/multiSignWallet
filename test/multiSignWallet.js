@@ -50,4 +50,48 @@ describe('MultiSigWallet', () => {
 			})
 		})
 	})
+
+	describe('Set transaction', () => {
+		describe('Success', () => {
+			// Set an amount for new transaction
+			const setNewAmount = ethers.parseUnits('3', 'ether')
+
+			beforeEach(async () => {
+				// Call setTransaction function
+				const tx = await multiSigWallet.connect(signatory1).setTransaction(signatory2.address, setNewAmount)
+				await tx.wait()
+			})
+
+			it('Should set new transaction', async () => {
+				// Retrieve latest transaction
+				const transactionCount = await multiSigWallet.getTransactionCount()
+
+				// Calculate the index of the latest transaction
+				const latestTransactionIndex = Number(transactionCount) - 1;
+
+				// Fetch the latest transaction using the index
+				const latestTransaction = await multiSigWallet.transactions(latestTransactionIndex)
+
+				// Check if the transaction is correctly set
+				expect(latestTransaction.to).to.equal(signatory2.address)
+				expect(latestTransaction.sendAmount).to.equal(setNewAmount)
+				expect(latestTransaction.executed).to.be.false
+				expect(latestTransaction.approvalCount).to.equal(0)
+			})
+
+			it('Should emit set transaction event', async () => {
+				const tx = await multiSigWallet.connect(signatory1).setTransaction(signatory2.address, setNewAmount)
+				await tx.wait()
+				await expect(tx).emit(multiSigWallet, 'TransactionCreated').withArgs(signatory2.address, setNewAmount)
+			})
+		})
+
+		describe('Failure', () => {
+			it('Rejects zero amount', async () => {
+				// Set a transaction with an amount of zero
+				const zeroAmount = ethers.parseUnits('0', 'ether')
+				await expect(multiSigWallet.setTransaction(signatory1.address, zeroAmount)).to.be.revertedWith('Amount should not be zero');
+			})
+		})
+	})
 })
