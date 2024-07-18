@@ -15,7 +15,7 @@ describe('MultiSigWallet', () => {
 		// Deploy MultiSigWallet
 		const MultiSigWallet = await ethers.getContractFactory('MultiSigWallet')
 		multiSigWallet = await MultiSigWallet.deploy([signatory1.address, signatory2.address, signatory3.address])
-		await multiSigWallet.waitForDeployment()
+		await multiSigWallet.waitForDeployment();
 	})
 
 	describe('Deployment', () => {
@@ -50,5 +50,4 @@ describe('MultiSigWallet', () => {
 			})
 		})
 	})
-
 })

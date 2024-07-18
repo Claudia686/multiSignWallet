@@ -5,9 +5,14 @@ contract MultiSigWallet {
 	address[3] public signatories;
 	uint public requiredSignatures = 2;
 
+	// Event here
+	event TransactionCreated(address to, uint sendAmount);
+
+
+
  struct Transaction {
  	address to;
- 	uint sentAmount;
+ 	uint sendAmount;
  	bool executed;
  	uint approvalCount;
 }
@@ -30,5 +35,26 @@ modifier onlySignatory() {
  		}
  	}
  	return false;
+ }
+
+ function setTransaction( address _to, uint _sendAmount) public onlySignatory {
+ 	   // Ensure the amount is greater than zero
+ 	  require(_sendAmount > 0, 'Amount should not be zero');
+
+ 	// Create new transaction
+ 	 transactions.push(Transaction({
+ 		to: _to,
+ 		sendAmount: _sendAmount,
+ 		executed: false,
+ 		approvalCount: 0
+ 	}));
+
+    // Emit the event
+ 	 emit TransactionCreated(_to, _sendAmount);
+ }
+
+ // Get the count of transactions
+ function getTransactionCount() public view returns (uint) {
+ 	return transactions.length;
  }
 }
