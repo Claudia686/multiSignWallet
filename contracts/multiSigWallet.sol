@@ -83,6 +83,33 @@ contract MultiSigWallet {
             executeTransaction(_id);  
         }
     }
+
+     function executeTransaction(uint _id) internal {
+        // Check if the transaction has already been executed
+        require(!transactions[_id].executed, 'Transaction already executed');
+        
+        // Get the transaction from the transactions array
+        Transaction storage transaction = transactions[_id];
+
+        // Check if the required number of approvals has been met
+        require(transaction.approvalCount >= requiredSignatures, 'Not enough approvals');
+
+        // Check that the recipient address is not the zero address
+       require(transaction.to != address(0), "Invalid address");
+
+       // Transaction amount is greater than zero
+       require(transaction.sendAmount > 0, "Send amount must be greater than zero");
+
+        // Send the specified amount to the recipient address
+        (bool success, ) = transaction.to.call{value: transaction.sendAmount}('');
+        require(success, 'Transaction failed');
+
+        // Mark the transaction as executed
+        transaction.executed = true;
+
+        // Emit the event for execute transaction
+        emit TransactionExecuted(_id);
+    }
 }
   
 
