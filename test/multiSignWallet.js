@@ -16,6 +16,7 @@ describe('MultiSigWallet', () => {
 		const MultiSigWallet = await ethers.getContractFactory('MultiSigWallet')
 		multiSigWallet = await MultiSigWallet.deploy([signatory1.address, signatory2.address, signatory3.address])
 		await multiSigWallet.waitForDeployment();
+
 	})
 
 	describe('Deployment', () => {
@@ -67,7 +68,7 @@ describe('MultiSigWallet', () => {
 				const transactionCount = await multiSigWallet.getTransactionCount()
 
 				// Calculate the index of the latest transaction
-				const latestTransactionIndex = Number(transactionCount) - 1;
+				const latestTransactionIndex = Number(transactionCount) - 1
 
 				// Fetch the latest transaction using the index
 				const latestTransaction = await multiSigWallet.transactions(latestTransactionIndex)
