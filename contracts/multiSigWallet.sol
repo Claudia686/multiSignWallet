@@ -18,6 +18,9 @@ contract MultiSigWallet {
         uint approvalCount;
     }
 
+    // Fallback function to receive Ether
+    receive() external payable {}
+
     Transaction[] public transactions;
 
     modifier onlySignatory() {
@@ -109,6 +112,9 @@ contract MultiSigWallet {
 
         // Emit the event for execute transaction
         emit TransactionExecuted(_id);
+    }
+
+    function sendTransaction(address _to, uint _sendAmount) public {
     }
 }
   
