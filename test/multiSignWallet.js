@@ -95,4 +95,88 @@ describe('MultiSigWallet', () => {
 			})
 		})
 	})
+
+	describe('Approve transaction', () => {
+		describe('Success', () => {
+			// Setting a new transaction amount
+			const setNewAmount = ethers.parseUnits('3', 'ether')
+
+			beforeEach(async () => {
+				// Send funds to contract
+				const tx = await signatory1.sendTransaction({
+					to: multiSigWallet.target,
+					value: ethers.parseEther("10.0")
+				})
+				await tx.wait()
+				const setTx = await multiSigWallet.connect(signatory1).setTransaction(signatory1.address, setNewAmount);
+				await setTx.wait()
+			})
+
+			it('Should emit TransactionApproved event', async () => {
+				// Check for TransactionApproved event
+				await expect(multiSigWallet.connect(signatory1).approveTransaction(0))
+				.to.emit(multiSigWallet, 'TransactionApproved').withArgs(0)
+
+				await expect(multiSigWallet.connect(signatory2).approveTransaction(0))
+				.to.emit(multiSigWallet, 'TransactionApproved').withArgs(0)
+			})
+		})
+
+		describe('Failure', () => {
+			// Preventing non-signatories from approving a transaction
+			it('Should not allow a non-signatory to approve a transaction', async () => {
+				await expect(multiSigWallet.connect(hacker).approveTransaction(0))
+					.to.be.revertedWith('Not a signatory')
+			})
+		})
+	})
+
+	describe('Approve execute transaction', () => {
+		describe('Success', () => {
+			// Setting a new transaction amount
+			const setNewAmount = ethers.parseUnits('3', 'ether')
+
+			beforeEach(async () => {
+				// Send funds to contract
+				const tx = await signatory1.sendTransaction({
+					to: multiSigWallet.target,
+					value: ethers.parseEther("10.0")
+				})
+				await tx.wait()
+
+				const setTx = await multiSigWallet.connect(signatory1).setTransaction(signatory1.address, setNewAmount);
+				await setTx.wait()
+			})
+
+			it('Should execute the transaction and increment approval count', async () => {
+				const balanceBefore = await ethers.provider.getBalance(signatory1.address)
+
+				// First approval by signatory2
+				await multiSigWallet.connect(signatory2).approveTransaction(0)
+
+				let transaction = await multiSigWallet.transactions(0);
+				expect(transaction.approvalCount).to.equal(1)
+
+				// Second approval by signatory3
+				await multiSigWallet.connect(signatory3).approveTransaction(0)
+
+				transaction = await multiSigWallet.transactions(0);
+				expect(transaction.approvalCount).to.equal(2)
+
+				// Fetch the transaction details after second approval
+				transaction = await multiSigWallet.transactions(0)
+				expect(transaction.executed).to.be.true;
+				const balanceAfter = await ethers.provider.getBalance(signatory1.address)
+			})
+
+			it('Should emit TransactionExecuted event', async () => {
+				// Approve the transaction with the first signatory
+				await multiSigWallet.connect(signatory1).approveTransaction(0)
+				// Approve the transaction with signatory 2 and check for both events
+				await expect(multiSigWallet.connect(signatory2).approveTransaction(0))
+				.to.emit(multiSigWallet, 'TransactionExecuted').withArgs(0)
+			})
+		})
+
+	})
 })
