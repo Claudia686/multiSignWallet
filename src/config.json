@@ -1,6 +1,7 @@
 {
 	"31337": {
-		"MultiSigWallet": { 
-			"address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+		"multiSigWallet": { 
+			"address": "0x5fbdb2315678afecb367f032d93f642f64180aa3"
 		}
 	}
+}
