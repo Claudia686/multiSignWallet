@@ -1,10 +1,13 @@
 import React from 'react'
+import { ethers } from 'ethers'
 
 const IsSignatory = ({ multiSigWallet, isSignatory, setIsSignatory, address, setAddress }) => {
+
   const checkSignatoryHandler = async () => {
-      const result = await multiSigWallet.isSignatory(address);
-      setIsSignatory(result);
-      setIsSignatory(false);  
+      const result = await multiSigWallet.isSignatory(address)
+      setIsSignatory(result)
+      
+      const signatoryAddress = await ethers.getAddress(address)
   }
 
   return (
@@ -27,3 +30,4 @@ const IsSignatory = ({ multiSigWallet, isSignatory, setIsSignatory, address, set
 };
 
 export default IsSignatory;
+
