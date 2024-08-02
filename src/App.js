@@ -1,10 +1,6 @@
-import {
-  useEffect,
-  useState
-} from 'react'
-import {
-  ethers
-} from 'ethers'
+import { useState, useEffect } from 'react'
+
+import { ethers } from 'ethers'
 
 // Components 
 import IsSignatory from './components/IsSignatory'
@@ -25,6 +21,7 @@ function App() {
   const [transaction, setTransaction] = useState(null)
   const [amount, setAmount] = useState('')
   const [loading, setLoading] = useState(false)
+  const [transactionCount, setTransactionCount] = useState(0)
 
   const connectHandler = async () => {
     const accounts = await window.ethereum.request({
@@ -54,12 +51,11 @@ function App() {
   }
 
   useEffect(() => {
-    if (provider) { 
-    }   
-  }, [provider])
+    }, [])
 
-  return ( 
- <div>
+
+  return (
+    <div>
       <h1>Multi-Signature Wallet</h1>
       <button className='connect_wallet' onClick={connectHandler} disabled={loading}>
         {loading ? 'Connecting...' : account ? 'Wallet Connected' : 'Connect Wallet'}
@@ -71,8 +67,8 @@ function App() {
         setIsSignatory={setIsSignatory}
         address={address}
         setAddress={setAddress}
-
       />
+      
       <Transactions
         multiSigWallet={multiSigWallet}
         provider={provider}
@@ -81,4 +77,5 @@ function App() {
   )
 }
 
-export default App;
+export default App
+

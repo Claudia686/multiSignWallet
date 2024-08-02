@@ -30,4 +30,3 @@ const IsSignatory = ({ multiSigWallet, isSignatory, setIsSignatory, address, set
 };
 
 export default IsSignatory;
-

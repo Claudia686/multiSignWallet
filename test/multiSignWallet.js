@@ -150,7 +150,7 @@ describe('MultiSigWallet', () => {
 
 			it('Should execute the transaction and increment approval count', async () => {
 				const balanceBefore = await ethers.provider.getBalance(signatory1.address)
-
+	
 				// First approval by signatory2
 				await multiSigWallet.connect(signatory2).approveTransaction(0)
 
