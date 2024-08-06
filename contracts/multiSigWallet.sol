@@ -113,9 +113,6 @@ contract MultiSigWallet {
         // Emit the event for execute transaction
         emit TransactionExecuted(_id);
     }
-
-    function sendTransaction(address _to, uint _sendAmount) public {
-    }
 }
   
 

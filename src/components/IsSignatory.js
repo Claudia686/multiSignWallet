@@ -6,10 +6,11 @@ const IsSignatory = ({ multiSigWallet, isSignatory, setIsSignatory, address, set
   const checkSignatoryHandler = async () => {
       const result = await multiSigWallet.isSignatory(address)
       setIsSignatory(result)
-      
       const signatoryAddress = await ethers.getAddress(address)
   }
 
+
+ {/* Check for Signatory */}  
   return (
     <div className='isSignatory_input'>
       <input 
@@ -26,7 +27,9 @@ const IsSignatory = ({ multiSigWallet, isSignatory, setIsSignatory, address, set
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 export default IsSignatory;
+
+

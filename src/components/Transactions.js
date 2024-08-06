@@ -6,8 +6,7 @@ const Transactions = ({ multiSigWallet, provider }) => {
    const [address, setAddress] = useState('')
    const [amount, setAmount] = useState('')
    const [executed, setExecuted] = useState(false)
-  const [transactionCount, setTransactionCount] = useState(0)
-
+   const [transactionCount, setTransactionCount] = useState(0)
 
    const setHandler = async () => {
     const signer = await provider.getSigner()
@@ -15,14 +14,14 @@ const Transactions = ({ multiSigWallet, provider }) => {
 
     if (address && amount) {
         const amount = ethers.parseUnits('3', 'ether')
-        const tx = await multiSigWallet.connect(signer).setTransaction(address, amount);
+        const tx = await multiSigWallet.connect(signer).setTransaction(address, amount)
         await tx.wait()
       }
   }
 
    const fetchTransactionCount = async () => {
     if (!multiSigWallet) return
-    const txCount = await multiSigWallet.getTransactionCount();
+    const txCount = await multiSigWallet.getTransactionCount()
       setTransactionCount(Number(txCount));
   } 
 
@@ -33,7 +32,15 @@ const Transactions = ({ multiSigWallet, provider }) => {
   }, [provider, multiSigWallet])
  
 
-     
+   const approveHandler = async () => {
+    const signer = await provider.getSigner()
+    const signerAddress = await signer.getAddress()
+
+    const transaction1 = await multiSigWallet.connect(signer).approveTransaction(0)
+      await transaction1.wait()
+      setExecuted(true)
+    } 
+
       return (
         <>
      {/* Set Transaction */}   
@@ -59,8 +66,13 @@ const Transactions = ({ multiSigWallet, provider }) => {
     <Buttons text='Get Transaction Count' handler={fetchTransactionCount} />
      <p>Transaction Count: {transactionCount}</p>
     </div>
-    </>
+    
 
+     {/* Approve Transaction */}
+    <div className='approve_transaction'>
+    <Buttons text='Approve Transaction' handler={approveHandler} />
+    </div>
+    </>
   )
 }
 

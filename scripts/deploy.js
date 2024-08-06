@@ -2,7 +2,7 @@ const hre = require('hardhat');
 
 async function main() {
 	// Setup accounts & variables
-	[signatory1, signatory2, signatory3, hacker] = await ethers.getSigners()
+	[signatory1, signatory2, signatory3] = await ethers.getSigners()
 
 	// Deploy MultiSigWallet
 	const MultiSigWallet = await ethers.getContractFactory('MultiSigWallet')

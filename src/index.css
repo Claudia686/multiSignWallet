@@ -114,7 +114,7 @@ h1 {
 }
 
 /* Get Transaction Count */
-.transaction_count {
+ .transaction_count {
   display: flex;
   margin-left: 94vh;
   margin-top: -18px;
@@ -134,33 +134,26 @@ h1 {
     left: 0;
     right: 0;
     transform: none;
-  }
-  .transaction_count {
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    transform: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .isSignatory_input, .setTransaction_input {
-    height: auto;
-  }
-  .connect_wallet {
-    margin-left: 60%;
-    transform: translateX(-60%);
-  }
-  .transaction_count {
-    margin-left: 60%;
-    transform: translateX(-60%);
-  }
+  }}
+  
+ {/* Approve Transaction */}
+.approve_transaction {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ position: absolute;
+ left: 46%;
 }
 
 
 
+ 
 
 
 
 
+
+
+
+
+   
